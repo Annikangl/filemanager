@@ -31,7 +31,7 @@
                         <div class="col-sm-6 col-lg-3">
                             <div class="card text-center">
                                 <div class="card-body">
-                                    <h4 class="card-title text-muted">Загруженных файлов</h4>
+                                    <h4 class="card-title text-muted">Скачано файлов</h4>
                                     <h2 class="mt-3 mb-2"><i class="mdi mdi-arrow-down text-danger me-2"></i><b>8952</b>
                                     </h2>
                                     <p class="text-muted mb-0 mt-3"><b>48%</b> From Last 24 Hours</p>
@@ -42,8 +42,9 @@
                         <div class="col-sm-6 col-lg-3">
                             <div class="card text-center">
                                 <div class="card-body p-t-10">
-                                    <h4 class="card-title text-muted mb-0">Общий размер</h4>
-                                    <h2 class="mt-3 mb-2"><i class="mdi mdi-arrow-up text-success me-2"></i><b>6521</b></h2>
+                                    <h4 class="card-title text-muted mb-0">Загруженных файлов</h4>
+                                    <h2 class="mt-3 mb-2"><i class="mdi mdi-arrow-up text-success me-2"></i><b>6521</b>
+                                    </h2>
                                     <p class="text-muted mb-0 mt-3"><b>42%</b> Orders in Last 10 months</p>
                                 </div>
                             </div>
@@ -53,7 +54,8 @@
                             <div class="card text-center">
                                 <div class="card-body p-t-10">
                                     <h4 class="card-title text-muted mb-0">Unique Visitors</h4>
-                                    <h2 class="mt-3 mb-2"><i class="mdi mdi-arrow-up text-success me-2"></i><b>452</b></h2>
+                                    <h2 class="mt-3 mb-2"><i class="mdi mdi-arrow-up text-success me-2"></i><b>452</b>
+                                    </h2>
                                     <p class="text-muted mb-0 mt-3"><b>22%</b> From Last 24 Hours</p>
                                 </div>
                             </div>
@@ -77,7 +79,7 @@
                         <div class="col-lg-12">
                             <div class="card card-h-100">
                                 <div class="card-body">
-                                    <h4 class="mb-4 mt-0 card-title">Recent Contacts</h4>
+                                    <h4 class="mb-4 mt-0 card-title">Мои файлы</h4>
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="table-responsive">
@@ -88,68 +90,32 @@
                                                         <th>Расширение</th>
                                                         <th>Размер</th>
                                                         <th>Дата загрузки</th>
-                                                        <th>Срок хранения</th>
+                                                        <th>Окончание хранения</th>
                                                         <th>Действия</th>
                                                     </tr>
 
                                                     </thead>
                                                     <tbody>
-                                                    <tr>
-                                                        <td>Tiger Nixon</td>
-                                                        <td>System Architect</td>
-                                                        <td>Edinburgh</td>
-                                                        <td>61</td>
-                                                        <td>2011/04/25</td>
-                                                        <td>$320,800</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Garrett Winters</td>
-                                                        <td>Accountant</td>
-                                                        <td>Tokyo</td>
-                                                        <td>63</td>
-                                                        <td>2011/07/25</td>
-                                                        <td>$170,750</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Ashton Cox</td>
-                                                        <td>Junior Technical Author</td>
-                                                        <td>San Francisco</td>
-                                                        <td>66</td>
-                                                        <td>2009/01/12</td>
-                                                        <td>$86,000</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Cedric Kelly</td>
-                                                        <td>Senior Javascript Developer</td>
-                                                        <td>Edinburgh</td>
-                                                        <td>22</td>
-                                                        <td>2012/03/29</td>
-                                                        <td>$433,060</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Airi Satou</td>
-                                                        <td>Accountant</td>
-                                                        <td>Tokyo</td>
-                                                        <td>33</td>
-                                                        <td>2008/11/28</td>
-                                                        <td>$162,700</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Brielle Williamson</td>
-                                                        <td>Integration Specialist</td>
-                                                        <td>New York</td>
-                                                        <td>61</td>
-                                                        <td>2012/12/02</td>
-                                                        <td>$372,000</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Herrod Chandler</td>
-                                                        <td>Sales Assistant</td>
-                                                        <td>San Francisco</td>
-                                                        <td>59</td>
-                                                        <td>2012/08/06</td>
-                                                        <td>$137,500</td>
-                                                    </tr>
+                                                    @foreach($uploads as $upload)
+                                                        <tr>
+                                                            <td>{{ $upload->getOriginalNameAttribute() }}</td>
+                                                            <td>{{ $upload->getExtension() }}</td>
+                                                            <td>{{ $upload->getSize() }}</td>
+                                                            <td>{{ $upload->created_at }}</td>
+                                                            <td>{{ $upload->expired_at }}</td>
+                                                            <td>
+                                                                <a href="{{ route('dashboard.download', $upload) }}"
+                                                                   type="button"
+                                                                   class="btn btn-success btn-sm waves-effect waves-light">Скачать</a>
+                                                                <a
+                                                                    href="{{ route('show-file', ['media' => $upload->getFirstMedia('uploads'),
+'fileName' => $upload->getOriginalNameAttribute()]) }}"
+                                                                    type="button"
+                                                                    class="btn btn-primary btn-sm waves-effect waves-light">Посмотреть</a>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+
 
                                                     </tbody>
                                                 </table>

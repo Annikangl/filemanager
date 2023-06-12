@@ -3,7 +3,7 @@
         <div class="d-flex">
             <!-- LOGO -->
             <div class="navbar-brand-box">
-                <a href="index.html" class="logo logo-dark">
+                <a href="{{ route('dashboard.index') }}" class="logo logo-dark">
                         <span class="logo-sm">
                             <img src="{{ asset('assets/images/logo-sm-dark.png') }}" alt="logo-sm-dark" height="26">
                         </span>
@@ -105,7 +105,7 @@
                         </a>
                         <a href="" class="text-reset notification-item">
                             <div class="d-flex">
-                                <img src="assets/images/users/avatar-3.jpg"
+                                <img src="{{ asset('assets/images/users/avatar-3.jpg')  }}"
                                      class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                 <div class="flex-1">
                                     <h6 class="mb-1">James Lemire</h6>
@@ -157,23 +157,25 @@
                 </div>
             </div>
 
-            <div class="dropdown d-inline-block user-dropdown">
-                <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
-                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img class="rounded-circle header-profile-user" src="{{ asset('assets/images/users/avatar-1.jpg') }}"
-                         alt="Header Avatar">
-                    <span class="d-none d-xl-inline-block ms-1">{{ auth()->user()->name }}</span>
-                    <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
-                </button>
-                <div class="dropdown-menu dropdown-menu-end">
-                    <!-- item-->
-                    <a class="dropdown-item" href="#"><i class="ri-user-line align-middle me-1"></i> Профиль</a>
-                    <a class="dropdown-item d-block" href="#">
-                        <i class="ri-settings-2-line align-middle me-1"></i> Настройки</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item text-danger" href="{{ route('logout') }}"><i class="ri-shut-down-line align-middle me-1 text-danger"></i> Выйти</a>
+            @auth()
+                <div class="dropdown d-inline-block user-dropdown">
+                    <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img class="rounded-circle header-profile-user" src="{{ asset('assets/images/users/avatar-1.jpg') }}"
+                             alt="Header Avatar">
+                        <span class="d-none d-xl-inline-block ms-1">{{ auth()->user()->name }}</span>
+                        <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <!-- item-->
+                        <a class="dropdown-item" href="#"><i class="ri-user-line align-middle me-1"></i> Профиль</a>
+                        <a class="dropdown-item d-block" href="#">
+                            <i class="ri-settings-2-line align-middle me-1"></i> Настройки</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" href="{{ route('logout') }}"><i class="ri-shut-down-line align-middle me-1 text-danger"></i> Выйти</a>
+                    </div>
                 </div>
-            </div>
+            @endauth
 
         </div>
     </div>
