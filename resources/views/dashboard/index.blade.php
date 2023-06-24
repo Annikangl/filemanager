@@ -32,9 +32,8 @@
                             <div class="card text-center">
                                 <div class="card-body">
                                     <h4 class="card-title text-muted">Скачано файлов</h4>
-                                    <h2 class="mt-3 mb-2"><i class="mdi mdi-arrow-down text-danger me-2"></i><b>8952</b>
+                                    <h2 class="mt-3 mb-2"><i class="mdi mdi-arrow-down text-danger me-2"></i><b>{{ $downloadsCount }}</b>
                                     </h2>
-                                    <p class="text-muted mb-0 mt-3"><b>48%</b> From Last 24 Hours</p>
                                 </div>
                             </div>
                         </div>
@@ -43,9 +42,8 @@
                             <div class="card text-center">
                                 <div class="card-body p-t-10">
                                     <h4 class="card-title text-muted mb-0">Загруженных файлов</h4>
-                                    <h2 class="mt-3 mb-2"><i class="mdi mdi-arrow-up text-success me-2"></i><b>6521</b>
+                                    <h2 class="mt-3 mb-2"><i class="mdi mdi-arrow-up text-success me-2"></i><b>{{ $uploadsCount }}</b>
                                     </h2>
-                                    <p class="text-muted mb-0 mt-3"><b>42%</b> Orders in Last 10 months</p>
                                 </div>
                             </div>
                         </div>
@@ -53,25 +51,12 @@
                         <div class="col-sm-6 col-lg-3">
                             <div class="card text-center">
                                 <div class="card-body p-t-10">
-                                    <h4 class="card-title text-muted mb-0">Unique Visitors</h4>
-                                    <h2 class="mt-3 mb-2"><i class="mdi mdi-arrow-up text-success me-2"></i><b>452</b>
+                                    <h4 class="card-title text-muted mb-0">Зарегистрировано пользователей</h4>
+                                    <h2 class="mt-3 mb-2"><i class="mdi mdi-arrow-up text-success me-2"></i><b>{{ $usersCount }}</b>
                                     </h2>
-                                    <p class="text-muted mb-0 mt-3"><b>22%</b> From Last 24 Hours</p>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="card text-center">
-                                <div class="card-body p-t-10">
-                                    <h4 class="card-title text-muted mb-0">Monthly Earnings</h4>
-                                    <h2 class="mt-3 mb-2"><i class="mdi mdi-arrow-down text-danger me-2"></i><b>5621</b>
-                                    </h2>
-                                    <p class="text-muted mb-0 mt-3"><b>35%</b> From Last 1 Month</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <!-- end row -->
 
 

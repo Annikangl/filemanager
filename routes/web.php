@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Admin\IndexController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\CabinetController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
@@ -26,6 +26,8 @@ Route::get('/uploads/{media}/{fileName}', [DashboardController::class, 'showFile
 
 Route::middleware('auth:web')->group(function () {
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+
+    Route::get('/cabinet', [CabinetController::class, 'index'])->name('cabinet.index');
 
     Route::post('/clear-session', [DashboardController::class, 'clearSession'])->name('clear-session');
 

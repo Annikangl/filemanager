@@ -4,35 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Upload\UpdateUploadRequest;
 use App\Models\Upload;
+use App\Traits\WithEvents;
 use Illuminate\Http\Request;
 
 class UploadController extends Controller
 {
+    use WithEvents;
+
     public function index()
     {
         $uploads = Upload::query()->with(['user', 'media'])->latest()->get();
 
-        return view('dashboard.uploads.index', compact('uploads'));
-    }
+        $events = $this->getEvents();
 
-    public function create()
-    {
-        //
-    }
-
-    public function store(Request $request)
-    {
-        //
-    }
-
-    public function show(string $id)
-    {
-        //
+        return view('dashboard.uploads.index', compact('uploads', 'events'));
     }
 
     public function edit(Upload $upload)
     {
-        return view('dashboard.uploads.edit', compact('upload'));
+        $events = $this->getEvents();
+        return view('dashboard.uploads.edit', compact('upload', 'events'));
     }
 
     public function update(UpdateUploadRequest $request, Upload $upload)

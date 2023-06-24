@@ -28,6 +28,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'downloads'
     ];
 
     /**
@@ -66,6 +67,11 @@ class User extends Authenticatable
           self::ROLE_ADMIN,
           self::ROLE_USER
         ];
+    }
+
+    public function incrementDownloads(): void
+    {
+        $this->increment('downloads');
     }
 
     protected function createdAt(): Attribute

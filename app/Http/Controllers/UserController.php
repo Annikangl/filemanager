@@ -5,21 +5,28 @@ namespace App\Http\Controllers;
 use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\User;
+use App\Traits\WithEvents;
 
 class UserController extends Controller
 {
+    use WithEvents;
+
     public function index()
     {
         $users = User::query()
             ->where('id', '<>', auth()->id())
             ->latest()->get();
 
-        return view('dashboard.users.index', compact('users'));
+        $events = $this->getEvents();
+
+        return view('dashboard.users.index', compact('users', 'events'));
     }
 
     public function create()
     {
-        return view('dashboard.users.create');
+        $events = $this->getEvents();
+
+        return view('dashboard.users.create', compact('events'));
     }
 
 
@@ -42,7 +49,9 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        return view('dashboard.users.edit', compact('user'));
+        $events = $this->getEvents();
+
+        return view('dashboard.users.edit', compact('user', 'events'));
     }
 
     public function update(UpdateUserRequest $request, User $user)

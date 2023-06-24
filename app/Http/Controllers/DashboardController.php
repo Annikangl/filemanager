@@ -3,14 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UploadFileRequest;
-use App\Models\Media;
+use App\Jobs\CreateEvent;
+use App\Models\Event;
 use App\Models\Upload;
+use App\Models\User;
+use App\Traits\WithEvents;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 
 class DashboardController extends Controller
 {
+    use WithEvents;
+
     public function index()
     {
         $uploads = Upload::query()->with(['user', 'media'])
@@ -18,19 +24,26 @@ class DashboardController extends Controller
             ->latest()
             ->paginate(20);
 
-        return view('dashboard.index', compact('uploads'));
+        $events = $this->getEvents();
+
+        $uploadsCount = $uploads->count();
+        $downloadsCount = Auth::user()->downloads;
+        $usersCount = User::count();
+
+        return view('dashboard.index',
+            compact('uploads', 'downloadsCount', 'uploadsCount', 'events', 'usersCount'));
     }
 
     public function uploadForm()
     {
-        return view('dashboard.upload');
+        $events = $this->getEvents();
+
+        return view('dashboard.upload', compact('events'));
     }
 
-    /**
-     */
     public function upload(UploadFileRequest $request)
     {
-        $data = $request->validated();
+        $request->validated();
 
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
@@ -51,6 +64,8 @@ class DashboardController extends Controller
                 }
             }
 
+            CreateEvent::dispatch('Загружен файл', 'На сервер был загружен новый файл');
+
             $request->session()->flash('success', 'Файл успешно загружен');
             return back();
         }
@@ -63,14 +78,20 @@ class DashboardController extends Controller
     {
         $media = $upload->getFirstMedia('uploads');
 
+        if (Auth::check()) {
+            Auth::user()->incrementDownloads();
+        }
+
         return $media->toResponse($request);
     }
 
-    public function showFile(\Spatie\MediaLibrary\MediaCollections\Models\Media $media, string $fileName)
+    public function showFile(Media $media, string $fileName)
     {
         $upload = Upload::findOrFail($media->model_id);
 
-        return view('dashboard.show', compact('media', 'upload'));
+        $events = $this->getEvents();
+
+        return view('dashboard.show', compact('media', 'upload', 'events'));
     }
 
     public function clearSession(Request $request)
