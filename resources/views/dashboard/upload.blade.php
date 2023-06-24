@@ -16,7 +16,23 @@
             <div class="page-content">
                 <div class="container-fluid">
 
-                    <form action="" method="POST" enctype="multipart/form-data">
+                    @include('includes.alert')
+
+                    @if (session('links'))
+                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                            @foreach(session()->get('links') as $link)
+                                <a href="{{ $link }}">{{ $link }}</a>
+                            @endforeach
+
+                                <form action="{{ route('clear-session') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </form>
+
+                        </div>
+                    @endif
+
+                    <form action="{{ route('dashboard.upload') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="card">
                             <div class="card-body">
@@ -24,7 +40,7 @@
                                 <p class="card-title-desc">Выберите файл на вашем устройстве и загрузите его/</p>
                                 <div class="input-group mb-3">
                                     <label class="col-sm-2 col-form-label">Файл</label>
-                                    <input type="file" class="form-control" id="customFile" name="input_file" required>
+                                    <input type="file" class="form-control" id="input_file" name="files[]" required multiple>
                                 </div>
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Срок хранения</label>
@@ -36,6 +52,9 @@
                                             <option value="168">1 неделя</option>
                                             <option value="720">1 месяц</option>
                                             <option value="4320">6 месяцев</option>
+                                            @if(auth()->user()->isAdmin())
+                                                <option value="43800">Бессрочно</option>
+                                            @endif
                                         </select>
                                     </div>
                                 </div>

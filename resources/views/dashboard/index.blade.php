@@ -83,7 +83,7 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="table-responsive">
-                                                <table class="table table-hover mb-0">
+                                                <table class="table table-hover mb-0 table-striped">
                                                     <thead>
                                                     <tr>
                                                         <th>Название</th>
@@ -98,18 +98,18 @@
                                                     <tbody>
                                                     @foreach($uploads as $upload)
                                                         <tr>
-                                                            <td>{{ $upload->getOriginalNameAttribute() }}</td>
-                                                            <td>{{ $upload->getExtension() }}</td>
+                                                            <td style="max-width: 400px">{{ $upload->getOriginalName() }}</td>
+                                                            <td> {{ $upload->getExtension() }}</td>
                                                             <td>{{ $upload->getSize() }}</td>
                                                             <td>{{ $upload->created_at }}</td>
                                                             <td>{{ $upload->expired_at }}</td>
-                                                            <td>
+                                                            <td >
                                                                 <a href="{{ route('dashboard.download', $upload) }}"
                                                                    type="button"
                                                                    class="btn btn-success btn-sm waves-effect waves-light">Скачать</a>
                                                                 <a
                                                                     href="{{ route('show-file', ['media' => $upload->getFirstMedia('uploads'),
-'fileName' => $upload->getOriginalNameAttribute()]) }}"
+'fileName' => $upload->getOriginalName()]) }}"
                                                                     type="button"
                                                                     class="btn btn-primary btn-sm waves-effect waves-light">Посмотреть</a>
                                                             </td>

@@ -7,8 +7,7 @@ use App\Models\Media;
 use App\Models\Upload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
+
 
 class DashboardController extends Controller
 {
@@ -16,32 +15,48 @@ class DashboardController extends Controller
     {
         $uploads = Upload::query()->with(['user', 'media'])
             ->where('user_id', Auth::id())
+            ->latest()
             ->paginate(20);
 
-        return view('user.dashboard.index', compact('uploads'));
+        return view('dashboard.index', compact('uploads'));
     }
 
     public function uploadForm()
     {
-        return view('user.dashboard.upload');
+        return view('dashboard.upload');
     }
 
     /**
-     * @throws FileDoesNotExist
-     * @throws FileIsTooBig
      */
     public function upload(UploadFileRequest $request)
     {
-        $upload = Upload::query()->create([
-            'filename' => md5(uniqid(rand(), true)),
-            'user_id' => Auth::id(),
-            'expired_at' => $request->validated('file_expired'),
-        ]);
+        $data = $request->validated();
 
-        $upload->addMedia($request->validated('input_file'))
-            ->toMediaCollection('uploads');
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                $upload = Upload::query()->create([
+                    'filename' => md5(uniqid(rand(), true)),
+                    'user_id' => Auth::id(),
+                    'expired_at' => $request->validated('file_expired'),
+                ]);
 
-        return back()->with('success', 'Файл успешно загружен');
+                try {
+                    $upload->addMedia($file)
+                        ->toMediaCollection('uploads');
+
+                    $request->session()->push('links', $upload->getFirstMediaUrl('uploads'));
+                } catch (\Throwable $exception) {
+                    $request->session()->flash('error', $exception->getMessage());
+                    return back();
+                }
+            }
+
+            $request->session()->flash('success', 'Файл успешно загружен');
+            return back();
+        }
+
+
+        return back()->with('error', 'Пожалуйста, выберите файл для загрузки');
     }
 
     public function download(Upload $upload, Request $request)
@@ -55,6 +70,12 @@ class DashboardController extends Controller
     {
         $upload = Upload::findOrFail($media->model_id);
 
-        return view('user.dashboard.show', compact('media', 'upload'));
+        return view('dashboard.show', compact('media', 'upload'));
+    }
+
+    public function clearSession(Request $request)
+    {
+        $request->session()->flush();
+        return back();
     }
 }

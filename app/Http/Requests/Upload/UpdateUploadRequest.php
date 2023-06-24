@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Upload;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\File;
 
-class UploadFileRequest extends FormRequest
+class UpdateUploadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,8 +22,6 @@ class UploadFileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'files' => ['required', 'array'],
-            'files.*' => ['required', 'file','max:10240'],
             'file_expired' => ['required', 'integer']
         ];
     }

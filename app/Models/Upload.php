@@ -31,12 +31,19 @@ class Upload extends Model implements HasMedia
     protected function expiredAt(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => $value,
+            get: fn (string $value) => Carbon::parse($value)->format('d.m.Y'),
             set: fn (int $value) => Carbon::now()->addHours($value),
         );
     }
 
-    public function getOriginalNameAttribute(): string
+    protected function createdAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => Carbon::parse($value)->format('d.m.Y'),
+        );
+    }
+
+    public function getOriginalName(): string
     {
         return $this->getFirstMedia('uploads')->file_name;
     }
