@@ -2,7 +2,7 @@ version: '3'
 services:
     laravel.test:
         build:
-            context: ./vendor/laravel/sail/runtimes/8.2
+            context: ./docker/8.2
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
@@ -64,6 +64,17 @@ services:
                 - ping
             retries: 3
             timeout: 5s
+
+    cron:
+        build:
+            context: ./docker/cron
+            dockerfile: Dockerfile
+        container_name: cron
+        volumes:
+            - '.:/var/www/html'
+        networks:
+            - sail
+
 networks:
     sail:
         driver: bridge

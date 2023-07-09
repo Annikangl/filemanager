@@ -17,7 +17,7 @@ class Kernel extends ConsoleKernel
 
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('uploads:delete-expired')->daily();
+        $schedule->command('uploads:delete-expired')->everyMinute();
     }
 
     protected function commands(): void
